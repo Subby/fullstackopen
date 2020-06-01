@@ -1,0 +1,1 @@
+- Sequence diagrams are in (https://www.websequencediagrams.com/)[WebSequenceDiagram] format.

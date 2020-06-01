@@ -1,0 +1,28 @@
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
+server-->browser: HTML code
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa.js
+server-->browser: spa.js
+note over browser:
+When the Javascript is executed, a request is sent to fetch data.json
+end note
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+server-->browser: data.json
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
+note over browser:
+When data.json is retrieved, the event handler calls the redrawNotes function
+which adds the notes as HTML elements to the DOM. This is then displayed to the user
+end note
+note over browser:
+User enters note text into input field and hits "Save"
+end note
+note over browser:
+Browser adds new note element to DOM
+end note
+note over browser:
+POST sent to server with form data containing "note: test note"
+end note
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+server-->browser: HTTP Status 201
