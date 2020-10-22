@@ -1,7 +1,23 @@
-import React from 'react'
+import React, {useState} from 'react'
+import {CountryDisplay} from "./CountryDisplay";
 
 const CountryListItem = ({country}) => {
-    return <li>{country.name}</li>;
+    const [showCountryInfo, setShowCountryInfo] = useState(false);
+    const showButtonText = showCountryInfo ? "Hide" : "Show";
+    const handleShowButtonClick = () => {
+      setShowCountryInfo(!showCountryInfo);
+    };
+    return <div>
+        <section id="top">
+            {country.name}<button onClick={handleShowButtonClick}>{showButtonText}</button>
+        </section>
+        {showCountryInfo &&
+            <section id="countryInfo">
+                <CountryDisplay country={country}/>
+            </section>
+        }
+
+    </div>;
 };
 
 export const CountryList = ({countries}) => {
