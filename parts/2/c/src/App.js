@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {CountryDisplay} from "./components/CountryDisplay";
+import {CountrySearchDisplay} from "./components/CountrySearchDisplay";
 import axios from 'axios';
 
 function App() {
@@ -29,8 +29,7 @@ function App() {
         find countries
         <input type="text" onChange={handleCountryTextInput} value={countryText}/>
         </p>
-
-        <CountryDisplay countries={filteredCountries}/>
+        <CountrySearchDisplay countries={filteredCountries}/>
       </div>
   );
 }
