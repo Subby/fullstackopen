@@ -1,8 +1,8 @@
 import React, {useState, useEffect } from 'react'
-import axios from 'axios'
 import {Filter} from "./components/Filter";
 import {PersonForm} from "./components/PersonForm";
 import {Persons} from "./components/Persons";
+import peopleService from "./services/peopleService";
 
 const App = () => {
     const [persons, setPersons] = useState([]);
@@ -20,12 +20,32 @@ const App = () => {
 
     const handleSubmitButton = (event) => {
         event.preventDefault();
-        if (persons.some(p => p.name === newName)) {
-            alert(`${newName} is already added to phonebook`)
+        const newPerson = {name: newName, number: newNumber};
+        const personSearchResult = persons.filter(p => p.name === newName);
+        if (personSearchResult.length > 0) {
+            if (window.confirm(`${newName} is already added to phonebook, replace the older number with a new one?`)) {
+                const foundPerson = personSearchResult[0];
+                peopleService
+                    .updatePerson(foundPerson.id, newPerson)
+                    .then(setPersons(persons.map(person =>
+                        person.name !== newPerson.name ? person : newPerson)))
+            }
         } else {
-            setPersons(persons.concat({name: newName, number: newNumber}));
+            peopleService
+                .addPerson(newPerson)
+                .then(setPersons(persons.concat(newPerson)));
         }
         setNewName("");
+        setNewNumber("");
+    }
+
+    const handleDeleteButton = (id) => {
+        const personName = persons.filter(person => person.id === id)[0].name;
+        if (window.confirm(`Do you really want to delete ${personName}?`)) {
+            peopleService
+                .deletePerson(id)
+                .then(setPersons(persons.filter(person => person.id !== id)));
+        }
     }
 
     const handleFilterChange = (event) => {
@@ -38,12 +58,12 @@ const App = () => {
         : persons.filter((person => person.name.toLowerCase().includes(filterText.toLowerCase())))
 
     useEffect(() => {
-        axios
-            .get('http://localhost:3001/persons')
+        peopleService
+            .getAll()
             .then(response => {
                 setPersons(response.data)
             })
-    }, [])
+    }, []);
 
     return (
         <div>
@@ -54,7 +74,7 @@ const App = () => {
                         newNumber={newNumber} handleNumberChange={handleNumberChange}
                         handleSubmitButton={handleSubmitButton}/>
             <h2>Numbers</h2>
-            <Persons personsToShow={personsToShow}/>
+            <Persons personsToShow={personsToShow} handleDeleteButton={handleDeleteButton}/>
         </div>
     )
 }
