@@ -1,0 +1,14 @@
+{
+  "name": "command-line-db",
+  "version": "1.0.0",
+  "description": "Fullstack open part 3 exercise",
+  "main": "mongo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Denver Fernandes",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^5.10.15"
+  }
+}
