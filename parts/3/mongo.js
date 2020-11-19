@@ -30,6 +30,7 @@ if (argLength < 5) {
         persons.forEach(person => {
             console.log(`${person.name} ${person.number}`)
         })
+        persons.forEach(person => console.log(person))
         mongoose.connection.close()
     })
 } else if (argLength === 5) {
