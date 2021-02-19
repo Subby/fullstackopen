@@ -4,14 +4,13 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import {Notification} from "./components/Notification";
 import "./style.css"
+import Toggleable from "./components/Toggleable";
+import BlogForm from "./components/BlogForm";
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setUrl] = useState("")
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
 
@@ -40,8 +39,7 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogUser')
   }
 
-  const handleCreateBlog = async (event) => {
-    event.preventDefault()
+  const handleCreateBlog = async (title, author, url) => {
     try {
       const response = await blogService.create({
         title: title,
@@ -54,7 +52,33 @@ const App = () => {
       console.error(e)
       createNotification('Error creating blog', 'error')
     }
+  }
 
+  const handleBlogLike = async (id, title, author, url, initialLikes) => {
+    const updatedLikes = initialLikes + 1
+    try {
+      await blogService.update(id, {
+        title: title,
+        author: author,
+        url: url,
+        likes: updatedLikes
+      })
+      const updatedBlogs = blogs.map(blog => {
+        if(blog.id === id) {
+          blog.title = title
+          blog.author = author
+          blog.url = url
+          blog.likes = updatedLikes
+          return blog
+        }
+        return blog
+      })
+      setBlogs(updatedBlogs)
+      createNotification('Likes added', 'success')
+    } catch(e) {
+      console.error(e)
+      createNotification('Error creating blog', 'error')
+    }
   }
 
   const createNotification = (message, type) => {
@@ -70,7 +94,7 @@ const App = () => {
       setUser(userData)
     }
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs( blogs.sort((a, b) => b.likes - a.likes ))
     )  
   }, [])
 
@@ -95,19 +119,11 @@ const App = () => {
       <Notification data={notification}/>
       <p>Hello {user.name} <button onClick={handleLogout}>Logout</button></p>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} handleBlogLike={handleBlogLike}/>
       )}
 
       <h2>create new</h2>
-      <form>
-        <label htmlFor="title">Title:</label>
-        <input type="text" name="title" id="title" onChange={({ target }) => setTitle(target.value)}/>
-        <label htmlFor="author">Author:</label>
-        <input type="text" name="author" id="author" onChange={({ target }) => setAuthor(target.value)}/>
-        <label htmlFor="title">Url:</label>
-        <input type="text" name="url" id="url" onChange={({ target }) => setUrl(target.value)}/>
-        <button onClick={handleCreateBlog}>Create</button>
-      </form>
+      <BlogForm handleCreateBlog={handleCreateBlog}/>
     </div>
   )
 }
