@@ -81,6 +81,22 @@ const App = () => {
     }
   }
 
+  const handleBlogRemove = async (id) => {
+    try {
+      await blogService.remove(id);
+    } catch (e) {
+      console.error(e)
+      createNotification('Error removing blog', 'error')
+    }
+    const updatedBlogs = blogs.flatMap(blog => {
+      if(blog.id === id) {
+       return []
+      }
+      return [blog]
+    })
+    setBlogs(updatedBlogs)
+  }
+
   const createNotification = (message, type) => {
     setNotification({message: message, type: type})
     setTimeout(() => {setNotification(null)}, 5000)
@@ -119,7 +135,7 @@ const App = () => {
       <Notification data={notification}/>
       <p>Hello {user.name} <button onClick={handleLogout}>Logout</button></p>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleBlogLike={handleBlogLike}/>
+        <Blog key={blog.id} blog={blog} handleBlogLike={handleBlogLike} handleBlogRemove={handleBlogRemove}/>
       )}
 
       <h2>create new</h2>
