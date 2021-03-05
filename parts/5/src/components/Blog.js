@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Toggleable from "./Toggleable";
 const Blog = ({ blog, handleBlogLike, handleBlogRemove}) => {
   const blogStyle = {
@@ -18,16 +19,28 @@ const Blog = ({ blog, handleBlogLike, handleBlogRemove}) => {
 
   }
   return (
-      <div style={blogStyle}>
-        {blog.title}
+      <div style={blogStyle} className="blogItem">
+        {blog.title} by {blog.author}
         <Toggleable buttonLabel="View">
-          <p>{blog.url}</p>
-          <p>{blog.likes} <button onClick={handleLikeButton}>Like</button></p>
-          <p>{blog.author}</p>
+          <p className="blogUrl">{blog.url}</p>
+          <p className="blogLikes">{blog.likes} <button onClick={handleLikeButton}>Like</button></p>
           <p><button onClick={handleRemoveButton}>Remove</button></p>
         </Toggleable>
       </div>
   )
+}
+
+Blog.propTypes = {
+    blog: PropTypes.exact({
+        id: PropTypes.string,
+        title: PropTypes.string,
+        url: PropTypes.string,
+        likes: PropTypes.number,
+        author: PropTypes.string,
+        user: PropTypes.array
+    }),
+    handleBlogLike: PropTypes.func.isRequired,
+    handleBlogRemove: PropTypes.func.isRequired,
 }
 
 

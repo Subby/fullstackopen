@@ -4,7 +4,6 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import {Notification} from "./components/Notification";
 import "./style.css"
-import Toggleable from "./components/Toggleable";
 import BlogForm from "./components/BlogForm";
 
 const App = () => {
