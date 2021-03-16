@@ -36,6 +36,6 @@
   },
   "proxy": "http://localhost:3003",
   "devDependencies": {
-    "cypress": "^6.6.0"
+    "cypress": "^6.4.0"
   }
 }

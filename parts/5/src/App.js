@@ -30,6 +30,7 @@ const App = () => {
       )
     } catch (e) {
       console.error(e)
+      createNotification('Error with login', 'error')
     }
   }
 
@@ -83,6 +84,7 @@ const App = () => {
   const handleBlogRemove = async (id) => {
     try {
       await blogService.remove(id);
+      createNotification('Blog deleted', 'success')
     } catch (e) {
       console.error(e)
       createNotification('Error removing blog', 'error')
@@ -116,6 +118,7 @@ const App = () => {
   if(user === null) {
     return(
        <div>
+         <Notification data={notification}/>
          <h2>Log in to application</h2>
          <form>
            <label htmlFor="username">Username</label>
