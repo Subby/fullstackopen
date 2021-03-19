@@ -73,7 +73,7 @@ const App = () => {
         }
         return blog
       })
-      setBlogs(updatedBlogs)
+      setBlogs(sortBlogsByLikes(updatedBlogs))
       createNotification('Likes added', 'success')
     } catch(e) {
       console.error(e)
@@ -111,9 +111,11 @@ const App = () => {
       setUser(userData)
     }
     blogService.getAll().then(blogs =>
-      setBlogs( blogs.sort((a, b) => b.likes - a.likes ))
+      setBlogs( sortBlogsByLikes(blogs))
     )  
   }, [])
+
+  const sortBlogsByLikes = (blogs) => blogs.sort((a, b) => b.likes - a.likes)
 
   if(user === null) {
     return(
