@@ -1,4 +1,6 @@
-import {combineReducers, createStore} from "redux";
+import {combineReducers, createStore, applyMiddleware} from "redux";
+import thunk from 'redux-thunk'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import {anectodeReducer} from "./reducers/anecdoteReducer";
 import {notificationReducer} from "./reducers/notificationReducer"
 import {filterReducer} from "./reducers/filterReducer";
@@ -9,4 +11,4 @@ const reducer = combineReducers({
     filter: filterReducer
 })
 
-export const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+export const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))

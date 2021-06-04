@@ -11,7 +11,6 @@ const createNew = async (content) => {
     const newAnecdote = { content: content, votes: 1 }
     const response = await axios.post(baseUrl, newAnecdote)
     return response.data
-
 }
 
 const update = async (id, currentVotes) => {
